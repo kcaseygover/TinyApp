@@ -5,6 +5,8 @@ const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 
 const bodyParser = require("body-parser");
+
+
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.set("view engine", "ejs");
@@ -40,11 +42,13 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  urlDatabase[generateRandomString()] = req.body.longURL;
+  res.redirect('/urls')
 });
+
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id };
+  let longURL = urlDatabase[req.params.id];
+  let templateVars = { shortURL: req.params.id, website: longURL };
   res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
@@ -56,6 +60,16 @@ app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect(302, "/urls");
 });
+app.post("/urls/:id/update", (req, res) => {
+  let longURLreplace = req.body.longURL;
+  res.send('/urls/:id/update');
+});
+app.post("/urls", (req, res) => {
+  let id = req.body.id;
+  console.log(req.body.id);
+  res.redirect('/urls/:id/update');
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
