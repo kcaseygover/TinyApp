@@ -62,11 +62,10 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 app.post("/urls/:id/update", (req, res) => {
   let longURLreplace = req.body.longURL;
+  console.log(longURLreplace);
   res.send('/urls/:id/update');
 });
 app.post("/urls", (req, res) => {
-  let id = req.body.id;
-  console.log(req.body.id);
   res.redirect('/urls/:id/update');
 });
 
