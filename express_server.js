@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 
 const bodyParser = require("body-parser");
-
+const cookieParser = require("cookie-parser");
 
 app.use(bodyParser.urlencoded({extended:false}));
 
@@ -56,17 +56,27 @@ app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[shortURL];
   res.redirect(302, longURL);
 });
+
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect(302, "/urls");
 });
 app.post("/urls/:id/update", (req, res) => {
-  let longURLreplace = req.body.longURL;
-  console.log(longURLreplace);
-  res.send('/urls/:id/update');
+  console.log(req.params.id);
+  let longURLreplace = req.body.longURLreplace;
+  urlDatabase[req.params.id] = longURLreplace;
+  res.redirect('/urls');
 });
-app.post("/urls", (req, res) => {
-  res.redirect('/urls/:id/update');
+
+let templateVars = {
+    username: req.cookies["username"],
+    //password: req.cookies["password"]
+  };
+res.render("index", templateVars);
+
+app.post("urls/login", (req, res) => {
+  res.cookies('username');
+  res.redirect('/');
 });
 
 app.listen(PORT, () => {

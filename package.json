@@ -4,7 +4,8 @@
   "description": "",
   "main": "express_server.js",
   "dependencies": {
-    "body-parser": "^1.15.2"
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3"
   },
   "devDependencies": {},
   "scripts": {
