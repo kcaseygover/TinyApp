@@ -76,12 +76,12 @@ app.post("/urls/:id/update", (req, res) => {
   res.redirect('/urls');
 });
 
-app.get('/cookie', function(req, res) {
-  res.cookies('username', {domain: 'localhost', path: '/login', secure: true });
-})
-
-app.post("urls/login", (req, res) => {
-  console.log(res);
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect('/');
+});
+app.post("/logout", (req, res) => {
+  res.clearCookie('username', req.body.username);
   res.redirect('/');
 });
 

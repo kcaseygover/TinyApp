@@ -1,5 +1,14 @@
 <h1>Hello</h1>    <!-- Write EJS code here to display shortened links -->
-<form method="POST" action="/login">
-<input type ="text" name="username" placeholder="sign in"/>
-<input type ="submit" value="Submit" />
 
+
+  <%if(username){%>
+
+  <form method="POST" action="/logout"><%=username %>
+  <input type="submit" value="Log Out"/>
+  </form>
+  <%}else{%>
+<form method="POST" action="/login">
+    <input type ="text" name="username" placeholder="sign in"/>
+    <input type ="submit" value="Log In" />
+    <%}%>
+    </form>
