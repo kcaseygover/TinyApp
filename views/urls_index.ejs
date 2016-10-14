@@ -4,16 +4,15 @@
 </head>
 <body>
   <% include partials/_header %>
-
-    <p>
-      <% for (keys in urls) { %>
+  <p>
+  <% for (keys in urls) { %>
     <form method="POST" action="/urls/<%=keys%>/delete">
     <%= keys %> <%= urls[keys]; %>
     <a href= "/urls/<%=keys%>">Edit</a>
-    <input type="submit" value="Delete!" /></form>
+    <input type="submit" value="Delete!" />
+    </form>
     <% } %>
   </p>
-
 </body>
 </html>
 

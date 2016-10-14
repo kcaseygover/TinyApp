@@ -16,11 +16,6 @@ const urlDatabase = {
   "pppppp": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-//let templateVars = {
-  //  username: req.cookies["username"]
-    //password: req.cookies["password"]
-  //};
-//res.render("index", templateVars);
 
 function generateRandomString() {
   let randomStr = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);
