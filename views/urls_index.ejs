@@ -2,17 +2,22 @@
 <html lang="en">
 <head>
 </head>
-<body>
-  <% include partials/_header %>
-  <p>
-  <% for (keys in urls) { %>
-    <form method="POST" action="/urls/<%=keys%>/delete">
+<body style="font-size:20px; padding:50px;">
+  <header>
+    <% include partials/_header %>
+  </header>
+    <% for (keys in urls) { %>
+    <form method="POST" action="/urls/<%=keys%>/delete"></form>
     <%= keys %> <%= urls[keys]; %>
     <a href= "/urls/<%=keys%>">Edit</a>
     <input type="submit" value="Delete!" />
     </form>
     <% } %>
-  </p>
+    <br>
+    <br>
+    <a href="/urls/new">Shorten a New URL</a>
+
+
 </body>
 </html>
 

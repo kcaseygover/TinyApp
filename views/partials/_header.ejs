@@ -1,12 +1,17 @@
-<h1>Hello</h1>    <!-- Write EJS code here to display shortened links -->
-
-  <%if(username){%>
-  <form method="POST" action="/logout"><%=username %>
+   <!-- Write EJS code here to display shortened links -->
+<h3>Welcome!</h3>
+  <%if(email){%>
+  <form method="POST" action="/logout"><%=email %>
   <input type="submit" value="Log Out"/>
-  </form>
   <%}else{%>
-<form method="POST" action="/login">
-    <input type ="text" name="username" placeholder="sign in"/>
-    <input type ="submit" value="Log In" />
+  <p>
+    <a href="/login">Log In</a>
+  </p>
+  <p>
+    <a href="/register">Registration Page</a>
+  </p>
     <%}%>
     </form>
+
+
+
