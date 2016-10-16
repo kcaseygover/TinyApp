@@ -3,9 +3,16 @@
 <head>
 </head>
 <body>
-  <form action="/login" method="POST" style="margin:150px;">
-  <input type ="email" name="email"/>
-  <input type ="password" name="password"/>
+  <h2>Log In</h2>
 
+  <form action="/login" method="POST" style="margin:150px;">
+  <label for="email">Email:</label>
+  <input type ="email" name="email" placeholder="Email" />
+  <br>
+  <label for="password">Password:</label>
+  <input type ="password" name="password" placeholder="Password" />
+  <br>
+  <input type="submit" value="LogIn"/>
+</form>
 </body>
 </html>
