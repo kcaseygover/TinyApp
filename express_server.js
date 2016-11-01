@@ -50,7 +50,11 @@ let searchPassword = function(obj, query) {
 };
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  if (users[req.session.user_id]) {
+    res.redirect("/urls");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.get("/urls.json", (req, res) => {
@@ -66,20 +70,28 @@ app.get("/urls", (req, res) => {
   let templateVars = {};
   if (users[req.session.user_id]) {
     templateVars = { urls: users[req.session.user_id]['links'], user_id: req.session.user_id, email: users[req.session.user_id]['email']};
-    } else {
-      templateVars = {user_id: null, email: null}
-    }
+  } else {
+    templateVars = {user_id: null, email: null}
+  }
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
   let templateVars = { urls: users[req.session.user_id]['links'], user_id: req.session.user_id, email: users[req.session.user_id]['email']};
-  res.render("urls_new", templateVars);
+  if(req.session.user_id) {
+    res.render("urls_new", templateVars);
+  } else {
+    res.status(401).send("<html><body><a href='/login'>Error: Please login</a></b></body></html>\n")
+  }
 });
 
 app.post("/urls", (req, res) => {
-  users[req.session.user_id]['links'][generateRandomString()] = req.body.longURL;
-  res.redirect('/urls')
+  if (req.session.user_id) {
+    users[req.session.user_id]['links'][generateRandomString()] = req.body.longURL;
+    res.redirect('/urls')
+  } else {
+    res.status(401)
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -105,7 +117,11 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("register");
+  if (users[req.session.user_id]) {
+    res.redirect("/");
+  } else {
+    res.render("register");
+  }
 });
 
 app.post("/register", (req, res) => {
@@ -126,14 +142,16 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  if (!users[req.session.user_id]) {
+    res.render("login");
+  }
 });
 
 app.post("/login", (req, res) => {
   var user = searchEmail(users, req.body.email);
   if (user && (bcrypt.compareSync(req.body.password, user.password))) {
     req.session.user_id = user['id'];
-      res.redirect('/urls');
+    res.redirect('/urls');
   } else {
     res.status(403).send("The email or password is incorrect");
   }

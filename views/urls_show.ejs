@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 </head>
-  <body style="font-size:20px; padding:50px;">
+<body style="font-size:20px; padding:50px;">
   <h1 style>ShortURL: <%=shortURL %></h1>
   <form action="/urls/<%=shortURL%>/update" method="POST" style="margin:150px;">
     <label for="newlongURL">Enter a URL:</label>
     <input id="longURLreplace" type="text" name="longURLreplace" placeholder="<%=website%>" style="width: 300px">
     <input type="submit" value="Update">
-    </form>
-  </body>
+  </form>
+
+</body>
 </html>
