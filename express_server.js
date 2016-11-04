@@ -10,6 +10,10 @@ const bcrypt = require('bcrypt');
 const cookieSession = require('cookie-session');
 
 const users = {};
+const urlDatabase = {
+  "b2xVn2": "http://www.lighthouselabs.ca",
+ "9sm5xK": "http://www.google.com"
+};
 
 app.use(cookieSession({
   name: 'session',
@@ -57,19 +61,11 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(users[req.session.user_id]['links']);
-});
-
-app.get("/hello", (req, res) => {
-  res.end("<html><body>Hello <b>World</b></body></html>\n");
-});
 
 app.get("/urls", (req, res) => {
-
   let templateVars = {};
   if (users[req.session.user_id]) {
-    templateVars = { urls: users[req.session.user_id]['links'], user_id: req.session.user_id, email: users[req.session.user_id]['email']};
+    templateVars = { urls: urlDatabase, user_id: req.session.user_id, email: users[req.session.user_id]['email']};
   } else {
     templateVars = {user_id: null, email: null}
   }
@@ -77,37 +73,30 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { urls: users[req.session.user_id]['links'], user_id: req.session.user_id, email: users[req.session.user_id]['email']};
-  if(req.session.user_id) {
-    res.render("urls_new", templateVars);
-  } else {
-    res.status(401).send("<html><body><a href='/login'>Error: Please login</a></b></body></html>\n")
-  }
+  let templateVars = { urls: urlDatabase, user_id: req.session.user_id, email: users[req.session.user_id]['email']};
+  res.render("urls_new", templateVars);
+
 });
 
 app.post("/urls", (req, res) => {
-  if (req.session.user_id) {
-    users[req.session.user_id]['links'][generateRandomString()] = req.body.longURL;
-    res.redirect('/urls')
-  } else {
-    res.status(401)
-  }
+  urlDatabase[generateRandomString()] = req.body.longURL;
+  res.redirect('/urls')
 });
 
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
-  let longURL = users[req.session.user_id]['links'][shortURL];
+  let longURL = urlDatabase[shortURL];
   res.redirect(302, longURL);
 });
 
 app.post("/urls/:id/delete", (req, res) => {
-  delete users[req.session.user_id]['links'][req.params.id];
+  delete urlDatabase[req.params.id];
   res.redirect(302, "/urls");
 });
 
 app.post("/urls/:id/update", (req, res) => {
   let longURLreplace = req.body.longURLreplace;
-  users[req.session.user_id]['links'][req.params.id] = longURLreplace;
+  urlDatabase[req.params.id] = longURLreplace;
   res.redirect(302, '/urls');
 });
 
@@ -125,19 +114,21 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+  console.log('am i getting this far???/')
   if(!req.body.email || !req.body.password) {
+    console.log('no email no pw')
     res.status(400).send("The email or password field is empty");
   } else if (searchEmail(users, req.body.email)) {
+    console.log('already here')
     res.status(400).send("That email is already registered");
   } else {
     const userRandomID = {};
     userRandomID["id"] = generateRandomString();
     userRandomID["email"] = req.body.email;
     userRandomID["password"] = bcrypt.hashSync(req.body.password, 10);
-    userRandomID['links'] = {};
     users[userRandomID['id']] = userRandomID;
-    req.session.user_id = userRandomID['id'];
-    res.redirect(302, '/urls');
+    req.session['user_id'] = userRandomID['id'];
+    res.redirect('/urls');
   };
 });
 
@@ -158,7 +149,7 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let longURL = users[req.session.user_id]['links'][req.params.id];
+  let longURL = urlDatabase[req.params.id];
   let templateVars = { shortURL: req.params.id, website: longURL};
   res.render("urls_show", templateVars);
 });

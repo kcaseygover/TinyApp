@@ -1,21 +1,20 @@
    <!-- Write EJS code here to display shortened links -->
 
 
-   <h3>Welcome!</h3>
-   <%if(email){%>
+<h3>Welcome!</h3>
+<%if(user_id){%>
    <label for="user_id"></label>
    <form method="POST" action="/logout"><%=email %>
-   <input type="submit" value="Log Out"/>
-
-   <%}else{%>
-   <p>
-   <a href="/login">Log In</a>
-   </p>
-   <p>
-   <a href="/register">Registration Page</a>
-   </p>
-   <%}%>
+      <input type="submit" value="Log Out"/>
    </form>
+<%}else{%>
+   <p>
+      <a href="/login">Log In</a>
+   </p>
+   <p>
+      <a href="/register">Registration Page</a>
+   </p>
+<%}%>
 
 
 
